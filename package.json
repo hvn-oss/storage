@@ -8,6 +8,7 @@
     "test": "vp run -r test",
     "build": "vp run -r build",
     "ready": "vp run check && vp run test && vp run build",
+    "version": "vpx changeset version",
     "release": "vp run build && vpx changeset publish",
     "dev": "vp run website#dev",
     "clean": "vp run -r clean && git clean -xdf node_modules dist .output",

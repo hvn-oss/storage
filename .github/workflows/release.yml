@@ -30,4 +30,7 @@ jobs:
         id: changesets
         uses: changesets/action@v1
         with:
+          version: vp run version
           publish: vp run release
+          commit: "ci: Version Packages"
+          title: "ci: Version Packages"
