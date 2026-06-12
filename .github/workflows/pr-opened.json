@@ -1,0 +1,14 @@
+{
+  "action": "opened",
+  "number": 42,
+  "pull_request": {
+    "number": 42,
+    "head": {
+      "ref": "test-branch"
+    },
+    "base": {
+      "ref": "main"
+    },
+    "merged": false
+  }
+}
