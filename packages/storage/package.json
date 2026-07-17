@@ -1,0 +1,46 @@
+{
+  "name": "@hvn-oss/storage",
+  "version": "0.0.2",
+  "description": "Type-safe uploads for S3-compatible object storage.",
+  "homepage": "https://github.com/hvn-oss/storage#readme",
+  "bugs": {
+    "url": "https://github.com/hvn-oss/storage/issues"
+  },
+  "license": "MIT",
+  "author": "Daniel Fakunle <danielofakunle@yahoo.com>",
+  "repository": {
+    "type": "git",
+    "url": "github:hvn-oss/storage",
+    "directory": "packages/storage"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "imports": {
+    "#/*": "./src/*",
+    "#tests/*": "./tests/*"
+  },
+  "exports": {
+    ".": "./dist/index.mjs",
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "vp pack",
+    "dev": "vp pack --watch",
+    "test": "vp test",
+    "check": "vp check",
+    "prepublishOnly": "vp run build",
+    "clean": "git clean -xdf node_modules dist .output"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "bumpp": "^11.1.0",
+    "typescript": "^7.0.2",
+    "vite": "catalog:",
+    "vite-plus": "catalog:"
+  }
+}

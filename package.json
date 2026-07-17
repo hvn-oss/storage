@@ -1,0 +1,20 @@
+{
+  "name": "storage",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "ready": "vp check && vp run -r test && vp run -r build",
+    "dev": "vp run docs#dev",
+    "prepare": "vp config",
+    "clean": "vp run -r clean && git clean -xdf node_modules dist .output"
+  },
+  "devDependencies": {
+    "vite": "catalog:",
+    "vite-plus": "catalog:"
+  },
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "packageManager": "pnpm@11.13.1"
+}
