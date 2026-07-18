@@ -32,7 +32,7 @@ jobs:
         run: vp install
       - name: Run Changesets (version or publish)
         id: changesets
-        uses: changesets/action@v2
+        uses: changesets/action@v1
         with:
           version: vp run version
           publish: vp run release
