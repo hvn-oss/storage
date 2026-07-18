@@ -7,6 +7,8 @@
     "ready": "vp check && vp run -r test && vp run -r build",
     "dev": "vp run docs#dev",
     "prepare": "vp config",
+    "version": "vpx changeset version",
+    "release": "vp run build && vpx changeset publish",
     "clean": "vp run -r clean && git clean -xdf node_modules dist .output"
   },
   "devDependencies": {
