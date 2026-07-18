@@ -10,6 +10,7 @@
     "clean": "vp run -r clean && git clean -xdf node_modules dist .output"
   },
   "devDependencies": {
+    "@changesets/cli": "catalog:",
     "vite": "catalog:",
     "vite-plus": "catalog:"
   },
