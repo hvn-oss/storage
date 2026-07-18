@@ -1,6 +1,6 @@
 {
   "name": "@hvn-oss/storage",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Type-safe uploads for S3-compatible object storage.",
   "homepage": "https://github.com/hvn-oss/storage#readme",
   "bugs": {
