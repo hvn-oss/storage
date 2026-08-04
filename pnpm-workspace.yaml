@@ -6,7 +6,10 @@ packages:
 catalogMode: prefer
 
 catalog:
+  "@effect/tsgo": ^0.27.1
   "@types/node": ^24
+  effect: ^3.22.1
+  effect-solutions: ^0.5.3
   typescript: ^7.0.2
   vite: npm:@voidzero-dev/vite-plus-core@0.2.7
   vite-plus: 0.2.7
@@ -17,3 +20,5 @@ peerDependencyRules:
     - vite
   allowedVersions:
     vite: "*"
+allowBuilds:
+  msgpackr-extract: true

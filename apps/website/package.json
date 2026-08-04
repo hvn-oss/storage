@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vp dev",
+    "typecheck": "tsc --noEmit",
     "build": "tsc && vp build",
     "preview": "vp preview"
   },

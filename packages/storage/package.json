@@ -27,8 +27,12 @@
     "build": "vp pack",
     "dev": "vp pack --watch",
     "test": "vp test",
+    "typecheck": "tsc --noEmit",
     "check": "vp check",
     "prepublishOnly": "vp run build"
+  },
+  "dependencies": {
+    "effect": "catalog:"
   },
   "devDependencies": {
     "@hvn-oss/tsconfig": "^0.0.4",
