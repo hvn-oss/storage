@@ -120,8 +120,8 @@ has broken this).
   artifact to react to — an outline, a rough take, a stub, or UI/logic code via the /prototype
   skill. Links the prototype as an asset. Use when "how should it look" or "how should it behave" is
   the key question.
-- **Grilling** (HITL): Conversation via the /grilling and /domain-modeling skills, one question at a
-  time. The default case.
+- **Grilling** (HITL): Conversation. The default case. Always invoke the /grilling and
+  /domain-modeling skills.
 - **Task** (HITL or AFK): Manual work that must happen before a _decision_ can be made — nothing to
   decide, prototype, or research, but the discussion is blocked until it's done. Signing up for a
   service so its API can be judged, provisioning access, moving data so its shape can be seen. This

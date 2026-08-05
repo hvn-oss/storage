@@ -32,7 +32,7 @@ project defines a script or task with that name.
 
 ## Effect Best Practices
 
-**IMPORTANT:** Always consult effect-solutions before writing Effect code.
+**IMPORTANT:** Always consult effect-solutions before writing Effect code. Run commands with `vpx`.
 
 1. Run `effect-solutions list` to see available guides
 2. Run `effect-solutions show <topic>...` for relevant patterns (supports multiple topics)

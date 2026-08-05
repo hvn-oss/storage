@@ -49,7 +49,7 @@ already settled it (Section B when `triage` isn't installed, Section C when ther
 **Section A — Issue tracker.**
 
 > Explainer: The "issue tracker" is where issues live for this repo. Skills like `to-tickets`,
-> `triage`, `to-spec`, and `qa` read from and write to it — they need to know whether to call
+> `triage`, and `to-spec` read from and write to it — they need to know whether to call
 > `gh issue create`, write a markdown file under `.scratch/`, or follow some other workflow you
 > describe. Pick the place you actually track work for this repo.
 
