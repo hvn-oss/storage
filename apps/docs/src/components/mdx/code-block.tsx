@@ -96,7 +96,9 @@ export function CodeBlock({
           ) : (
             icon
           )}
-          <figcaption className="flex-1 truncate mt-0 text-left">{title}</figcaption>
+          <figcaption className="flex-1 text-[0.9286em] truncate mt-0 text-left">
+            {title}
+          </figcaption>
           {Actions({
             className: "-me-2",
             children: allowCopy && <CopyButton containerRef={areaRef} />,
