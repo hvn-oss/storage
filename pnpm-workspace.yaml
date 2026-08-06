@@ -35,6 +35,8 @@ catalog:
   typescript: ^7.0.2
   vite: npm:@voidzero-dev/vite-plus-core@0.2.8
   vite-plus: 0.2.8
+  "@changesets/changelog-github": 1.0.0-next.8
+  "@changesets/cli": 3.0.0-next.11
 overrides:
   vite: "catalog:"
 peerDependencyRules:

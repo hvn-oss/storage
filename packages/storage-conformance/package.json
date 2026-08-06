@@ -29,10 +29,6 @@
     "access": "public"
   },
   "scripts": {
-    "build": "vp pack",
-    "test": "vp test",
-    "typecheck": "vp check --no-fmt --no-lint",
-    "check": "vp check",
     "clean": "git clean -fdx node_modules dist .output",
     "prepublishOnly": "vp run build"
   },

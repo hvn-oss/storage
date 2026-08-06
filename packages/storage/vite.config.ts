@@ -25,6 +25,14 @@ export default defineConfig({
     },
   },
   fmt: {},
+  run: {
+    tasks: {
+      build: "vp pack",
+      test: "vp test",
+      typecheck: "vp check --no-fmt --no-lint",
+      check: "vp check",
+    },
+  },
   test: {
     passWithNoTests: true,
   },

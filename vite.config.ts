@@ -16,5 +16,15 @@ export default defineConfig({
   },
   run: {
     cache: true,
+    tasks: {
+      ready: {
+        command: ["vp run test", "vp run docs#build"],
+      },
+      check: "vp check --fix",
+      test: {
+        command: "vp run check && vp run --filter @hvn-oss/* build && vp test && vp run -r test",
+      },
+      typecheck: "vp run -r typecheck",
+    },
   },
 });
