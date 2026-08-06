@@ -34,9 +34,21 @@ authorized key with its expected byte size and is available for authorized downl
 point-in-time fact, not a guarantee against later use of an unexpired upload capability. _Avoid_:
 Completed upload
 
+**Download Capability**: A short-lived bearer capability issued after application authorization that
+permits its holder to retrieve one Ready File directly from the storage provider. It grants no
+authority over the File Record and is not durable identity. _Avoid_: Download URL
+
 **Failed File**: A file whose lifecycle trusted server-side logic explicitly ended after determining
 that its authorization can no longer produce a ready file. It retains a canonical terminal reason;
 transport errors and client-reported failures are not sufficient.
 
 **Expired File**: A file whose transition to ready did not become authoritative before its
 completion deadline and which can no longer request completion.
+
+**In-Instance Continuation**: Continuing transfer work while the same browser client instance still
+holds transient scheduling state and multipart part evidence. It does not survive page reload or
+browser restart. _Avoid_: Session resume
+
+**Upload Session Recovery**: Reconstructing authoritative Upload Session and File Record lifecycle
+state from durable server data after client state is unavailable. It identifies unfinished files but
+does not reconstruct transient multipart part evidence.

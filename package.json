@@ -5,13 +5,16 @@
   "type": "module",
   "scripts": {
     "ready": "vp check && vp run -r test && vp run -r build",
-    "dev": "vp run website#dev",
+    "dev": "vp run docs#dev",
     "typecheck": "vp run -r typecheck",
+    "clean": "vp run -r clean && git clean -fdx node_modules dist .output",
     "prepare": "vp config && effect-tsgo patch --typescript"
   },
   "devDependencies": {
     "@effect/tsgo": "catalog:",
+    "@hvn-oss/tsconfig": "catalog:",
     "effect-solutions": "catalog:",
+    "typescript": "catalog:",
     "vite": "catalog:",
     "vite-plus": "catalog:"
   },

@@ -7,12 +7,13 @@ catalogMode: prefer
 
 catalog:
   "@effect/tsgo": ^0.27.1
+  "@hvn-oss/tsconfig": ^0.0.4
   "@types/node": ^24
   effect: ^3.22.1
   effect-solutions: ^0.5.3
   typescript: ^7.0.2
-  vite: npm:@voidzero-dev/vite-plus-core@0.2.7
-  vite-plus: 0.2.7
+  vite: npm:@voidzero-dev/vite-plus-core@0.2.8
+  vite-plus: 0.2.8
 overrides:
   vite: "catalog:"
 peerDependencyRules:
@@ -22,3 +23,16 @@ peerDependencyRules:
     vite: "*"
 allowBuilds:
   msgpackr-extract: true
+  esbuild: true
+  lightningcss: true
+minimumReleaseAgeExclude:
+  - "@voidzero-dev/vite-plus-core@0.2.8"
+  - "@voidzero-dev/vite-plus-darwin-arm64@0.2.8"
+  - "@voidzero-dev/vite-plus-darwin-x64@0.2.8"
+  - "@voidzero-dev/vite-plus-linux-arm64-gnu@0.2.8"
+  - "@voidzero-dev/vite-plus-linux-arm64-musl@0.2.8"
+  - "@voidzero-dev/vite-plus-linux-x64-gnu@0.2.8"
+  - "@voidzero-dev/vite-plus-linux-x64-musl@0.2.8"
+  - "@voidzero-dev/vite-plus-win32-arm64-msvc@0.2.8"
+  - "@voidzero-dev/vite-plus-win32-x64-msvc@0.2.8"
+  - vite-plus@0.2.8
