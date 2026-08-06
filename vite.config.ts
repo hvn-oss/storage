@@ -17,8 +17,9 @@ export default defineConfig({
   run: {
     cache: true,
     tasks: {
+      build: "vp run docs#build",
       ready: {
-        command: ["vp run test", "vp run docs#build"],
+        command: ["vp run test", "vp run build"],
       },
       check: "vp check --fix",
       test: {
