@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "ready": "vp check && vp run -r test && vp run -r build",
+    "test": "vp run -r build && vp test",
     "dev": "vp run docs#dev",
     "typecheck": "vp run -r typecheck",
     "clean": "vp run -r clean && git clean -fdx node_modules dist .output",

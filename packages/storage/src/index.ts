@@ -1,3 +1,2 @@
-export function fn() {
-  return "Hello, tsdown!";
-}
+// Reserved for runtime-neutral public contracts.
+export {};

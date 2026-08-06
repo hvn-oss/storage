@@ -1,0 +1,5 @@
+{
+  "$schema": "../../node_modules/@effect/tsgo/schema.json",
+  "extends": "@hvn-oss/tsconfig/node-library",
+  "include": ["src", "tests"]
+}
