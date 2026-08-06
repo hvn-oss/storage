@@ -6,13 +6,13 @@ export default defineConfig({
   },
   fmt: {
     proseWrap: "always",
-    ignorePatterns: ["routeTree.gen.ts"],
+    ignorePatterns: ["routeTree.gen.ts", ".source"],
   },
   lint: {
     jsPlugins: [{ name: "vite-plus", specifier: "vite-plus/oxlint-plugin" }],
     rules: { "vite-plus/prefer-vite-plus-imports": "error" },
     options: { typeAware: true, typeCheck: true },
-    ignorePatterns: ["routeTree.gen.ts"],
+    ignorePatterns: ["routeTree.gen.ts", ".source"],
   },
   run: {
     cache: true,

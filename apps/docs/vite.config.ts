@@ -8,14 +8,22 @@ import babel from "@rolldown/plugin-babel";
 import tailwindcss from "@tailwindcss/vite";
 import { nitro } from "nitro/vite";
 import { lazyPlugins } from "vite-plus";
+import { fumadocsMdx } from "fumadocs-mdx/vite";
 
 const config = defineConfig({
-  resolve: { tsconfigPaths: true },
+  resolve: {
+    tsconfigPaths: true,
+  },
   plugins: lazyPlugins(() => [
     devtools(),
+    fumadocsMdx(),
     nitro({ rollupConfig: { external: [/^@sentry\//] } }),
     tailwindcss(),
-    tanstackStart(),
+    tanstackStart({
+      prerender: {
+        enabled: true,
+      },
+    }),
     viteReact(),
     babel({ presets: [reactCompilerPreset()] }),
   ]),
