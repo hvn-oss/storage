@@ -1,21 +1,18 @@
-import { ModeToggle } from "#/components/mode-toggle.tsx";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { DocsPrototype, type DocsVariant } from "#/components/prototype/docs-prototype.tsx";
+import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/")({ component: Home });
+const docsVariants: DocsVariant[] = ["journey", "ownership", "surface"];
+
+export const Route = createFileRoute("/")({
+  validateSearch: (search: Record<string, unknown>): { variant: DocsVariant } => ({
+    variant: docsVariants.includes(search.variant as DocsVariant)
+      ? (search.variant as DocsVariant)
+      : "journey",
+  }),
+  component: Home,
+});
 
 function Home() {
-  return (
-    <div className="p-8">
-      <h1 className="text-4xl font-bold">Welcome to the TanStack Docs!</h1>
-      <Link
-        to="/docs/$"
-        params={{
-          _splat: "",
-        }}
-      >
-        Go to Docs
-      </Link>
-      <ModeToggle />
-    </div>
-  );
+  const { variant } = Route.useSearch();
+  return <DocsPrototype variant={variant} />;
 }

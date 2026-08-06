@@ -1,0 +1,36 @@
+---
+title: Authorize an Upload Route
+description:
+  Define policy and typed application decisions without exposing trusted callbacks to browser
+  bundles.
+---
+
+An **Upload Route** is a named, shared definition of upload policy. It binds trusted server
+authorization to an erased client contract used for end-to-end inference.
+
+```ts title="server/upload-routes.ts"
+export const uploadRoutes = createUploadRoutes({
+  documents: uploadRoute({
+    input: DocumentInput,
+    sessionMetadata: DocumentSessionMetadata,
+    fileMetadata: DocumentFileMetadata,
+    publicMetadata: DocumentPublicMetadata,
+    policy: { maximumFiles: 10, maximumFileSize: "250 MB" },
+    authorizeUpload,
+    authorizeOperation,
+  }),
+});
+
+export type AppStorage = UploadContract<typeof uploadRoutes>;
+```
+
+Browser and React modules use `import type` for `AppStorage`. They infer route names, input, and
+public metadata without reaching server callbacks, signing, persistence, credentials, or schemas at
+runtime.
+
+## Two authorization stages
+
+`authorizeUpload` decides whether an Upload Session may be created and snapshots durable policy.
+`authorizeOperation` decides later trusted operations such as recovery, cancellation, and download.
+Use `allow`, `reject`, `notAuthenticated`, `accessDenied`, and `notFound` decision helpers rather
+than throwing for expected outcomes.

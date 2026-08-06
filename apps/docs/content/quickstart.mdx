@@ -1,0 +1,90 @@
+---
+title: Build the first upload
+description:
+  Follow one Promise-first, React, Node, Postgres, and DigitalOcean Spaces path from authorization
+  to download.
+---
+
+> **Prototype scope:** This page tests the order and boundaries of the eventual quickstart. Commands
+> and APIs are illustrative until an installable release exists.
+
+The reference journey deliberately chooses one coherent path. It does not ask you to choose among
+every API, framework, database connection, and provider before seeing one file become ready.
+
+## 1. Prepare infrastructure
+
+The operator creates a Postgres database and an S3-compatible bucket, configures bucket CORS for the
+application origin, and makes credentials available to the Node runtime. The application never sends
+storage credentials to the browser.
+
+```bash title=".env"
+DATABASE_URL=postgres://...
+STORAGE_ENDPOINT=https://nyc3.digitaloceanspaces.com
+STORAGE_BUCKET=document-intake
+STORAGE_ACCESS_KEY_ID=...
+STORAGE_SECRET_ACCESS_KEY=...
+```
+
+## 2. Define an Upload Route
+
+The application owns authentication and authorization. HVN Storage owns protocol and lifecycle
+orchestration.
+
+```ts title="server/upload-routes.ts"
+export const uploadRoutes = createUploadRoutes({
+  documents: uploadRoute({
+    input: DocumentInput,
+    authorizeUpload: async ({ input, files, allow, accessDenied }) => {
+      const canEdit = await cases.canEdit(input.caseId);
+      return canEdit ? allow({ sessionMetadata: { caseId: input.caseId }, files }) : accessDenied();
+    },
+    authorizeOperation: authorizeDocumentOperation,
+  }),
+});
+```
+
+## 3. Mount the Web handler
+
+The portable handler accepts and returns Web Platform request values. Node wiring supplies concrete
+persistence and storage adapters.
+
+```ts title="server/storage-handler.ts"
+export const handleStorage = createStorageHandler({
+  routes: uploadRoutes,
+  persistence: postgresPersistence({ connectionString: env.DATABASE_URL }),
+  storage: digitalOceanSpaces({
+    endpoint: env.STORAGE_ENDPOINT,
+    bucket: env.STORAGE_BUCKET,
+    credentials,
+  }),
+});
+```
+
+## 4. Upload from React
+
+```tsx title="app/upload-documents.tsx"
+const { useStorage } = createStorageHooks<AppStorage>();
+
+export function UploadDocuments({ caseId }: { caseId: string }) {
+  const storage = useStorage("documents");
+
+  return (
+    <button onClick={() => storage.upload({ input: { caseId }, files })}>Upload documents</button>
+  );
+}
+```
+
+The controller exposes independent per-file progress and outcomes. One file's failure does not fail
+its siblings.
+
+## 5. Verify and download
+
+Completion is trusted only after server-side verification confirms the immutable Storage Key and
+exact expected byte size. A later download request runs application authorization again and returns
+a short-lived bearer capability for a Ready File.
+
+## Change one layer at a time
+
+- Keep the server and use the [vanilla browser client](/docs/browser-client).
+- Keep the domain contract and use [Effect-native authoring](/docs/effect).
+- Keep the portable handler and [deploy to Cloudflare Workers](/docs/cloudflare).

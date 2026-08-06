@@ -1,0 +1,38 @@
+---
+title: Who owns what
+description:
+  Keep application authorization, HVN Storage behavior, infrastructure deployment, and operations
+  distinct.
+---
+
+The system is easiest to operate when each responsibility has one clear owner.
+
+| Owner          | Responsible for                                                                              | Not responsible for                                                       |
+| -------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| Application    | Authentication, authorization callbacks, business input and metadata, user experience        | Signing storage requests, durable upload lifecycle, provider verification |
+| HVN Storage    | Protocol handling, Upload Sessions, File Records, capabilities, verification, typed outcomes | Defining users, deciding business access, provisioning cloud accounts     |
+| Infrastructure | Runtime, Postgres connectivity, bucket configuration, CORS, credentials                      | Application authorization policy, lifecycle decisions                     |
+| Operations     | Migrations, secret rotation, schema compatibility, monitoring, recovery procedures           | Browser transfer scheduling, silently changing terminal file state        |
+
+## Application authorization
+
+Applications authenticate requests and return typed authorization decisions. Expected denial is a
+value, not an exception. Browser code never imports these callbacks or their schemas.
+
+## HVN Storage coordination
+
+HVN Storage creates durable state, issues short-lived transfer capabilities, coordinates multipart
+operations, verifies completion, and projects one stable public error algebra. This is library
+behavior running inside the application's trusted runtime, not a separately hosted HVN control
+plane.
+
+## Infrastructure deployment
+
+Deployment connects that trusted runtime to Postgres and S3-compatible storage. Node and Cloudflare
+use different persistence adapters, but the portable HTTP contract remains the same.
+
+## Operations and migrations
+
+The library authors migrations; the application operator runs them. Deployments fail fast when the
+database schema version is unsupported. Credentials, capabilities, logs, and errors must remain
+secret-safe.

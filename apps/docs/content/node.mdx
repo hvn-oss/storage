@@ -1,0 +1,29 @@
+---
+title: Deploy on Node
+description:
+  Run the portable Web handler on Node with direct Postgres and an S3-compatible provider.
+---
+
+Stable v1 targets Node 22.18+ and Node 24 through ES2022 ESM entry points. The server handler
+remains framework-neutral: `(Request) => Promise<Response>`.
+
+## Runtime wiring
+
+Node deployment owns:
+
+- Mapping the framework route to the Web handler.
+- Supplying the direct `pg` persistence adapter.
+- Supplying an AWS S3 or DigitalOcean Spaces preset.
+- Loading credentials explicitly at startup.
+- Running library-authored database migrations before incompatible application code starts.
+
+```ts title="server/storage-handler.ts"
+export const handleStorage = createStorageHandler({
+  routes: uploadRoutes,
+  persistence: postgresPersistence({ pool }),
+  storage: digitalOceanSpaces({ endpoint, bucket, credentials }),
+});
+```
+
+Public modules are import-time side-effect-free. Environment access, validation, drivers,
+migrations, Layers, and runtimes initialize only through explicit APIs.

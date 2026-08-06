@@ -1,0 +1,24 @@
+---
+title: Run database migrations
+description:
+  Apply library-authored schema changes from a trusted Node environment before deploying
+  incompatible code.
+---
+
+Postgres stores the canonical Upload Session and File Record lifecycle. Schema compatibility is an
+operational responsibility even when the application runs on Cloudflare Workers.
+
+## Ownership
+
+- HVN Storage authors ordered migrations and defines supported schema versions.
+- The application operator reviews, schedules, and runs them.
+- The Node `pg` package provides the migration CLI and programmatic runner.
+- Runtime adapters fail fast when the connected schema version is unsupported.
+
+```bash
+vp exec -- hvn-storage migrate
+```
+
+The final command is illustrative. The implementation specification must define rollout ordering,
+backward-compatible windows, failure recovery, and the evidence required before a release changes
+the durable schema contract.

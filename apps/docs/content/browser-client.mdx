@@ -1,0 +1,33 @@
+---
+title: Use the vanilla browser client
+description: Start and observe browser transfers without a framework binding.
+---
+
+The Promise-facing browser entry owns upload, recovery, cancellation, and download workflows. It
+contains no trusted server implementation.
+
+```ts title="app/storage.ts"
+import { createStorageClient } from "@hvn-oss/storage/browser";
+import type { AppStorage } from "../server/storage-contract.js";
+
+export const storage = createStorageClient<AppStorage>({
+  endpoint: "/api/storage/v1",
+});
+```
+
+`upload` starts immediately and synchronously returns a live handle.
+
+```ts
+const handle = storage.upload("documents", {
+  input: { caseId },
+  files,
+});
+
+const unsubscribe = handle.subscribe((snapshot) => render(snapshot));
+const result = await handle.result;
+unsubscribe();
+handle.dispose();
+```
+
+After global authorization succeeds, Ready, Failed, Expired, and recoverably Paused files are values
+in the aggregate result rather than fail-fast Promise rejections.

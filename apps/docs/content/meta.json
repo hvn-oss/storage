@@ -1,3 +1,18 @@
 {
-  "pages": ["---Group---", "./(index)/index", "---Another Group---", "./guides/guide-1"]
+  "pages": [
+    "---Start here---",
+    "./(index)/index",
+    "./quickstart",
+    "./responsibility-boundaries",
+    "---Build---",
+    "./authorize-upload-route",
+    "./browser-client",
+    "./react",
+    "./effect",
+    "---Deploy---",
+    "./node",
+    "./cloudflare",
+    "---Operate---",
+    "./migrations"
+  ]
 }

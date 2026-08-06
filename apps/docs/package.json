@@ -16,6 +16,8 @@
     "@base-ui/react": "catalog:",
     "@fontsource-variable/jetbrains-mono": "catalog:",
     "@fontsource-variable/manrope": "catalog:",
+    "@headless-tree/core": "catalog:",
+    "@headless-tree/react": "catalog:",
     "@hugeicons/core-free-icons": "catalog:",
     "@hugeicons/react": "catalog:",
     "@tailwindcss/vite": "^4.1.18",

@@ -1,0 +1,26 @@
+---
+title: Deploy on Cloudflare Workers
+description: Keep the portable Web protocol while replacing runtime and persistence wiring.
+---
+
+Cloudflare Workers use the same route contract and HTTP behavior as Node. Portable entries do not
+require `nodejs_compat`.
+
+## Choose an edge Postgres adapter
+
+- **Hyperdrive:** cache-disabled connectivity with explicit transaction capabilities.
+- **Neon HTTP:** atomic batches for operations that fit its transaction model.
+
+```ts title="worker.ts"
+const appLayer = Layer.mergeAll(Cases.layer, hyperdriveLayer, digitalOceanSpacesLayer);
+
+export default {
+  fetch: createEffectStorageHandler({ routes: uploadRoutes }).pipe(
+    Effect.provide(appLayer),
+    Effect.runPromise,
+  ),
+} satisfies ExportedHandler<Env>;
+```
+
+Worker deployment owns bindings, compatibility date, credentials, and adapter configuration. HVN
+Storage owns the same lifecycle and verification semantics used on Node.

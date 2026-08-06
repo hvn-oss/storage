@@ -65,9 +65,9 @@ export function Navbar({ tree, setSearchOpen }: NavbarProps) {
       >
         <div ref={ref}>
           <div className="h-(--navbar-height) container container-padding-x mx-auto flex items-center justify-between">
-            <Link to="/" className="heading-xs flex gap-1">
+            <Link to="/" search={{ variant: "journey" }} className="heading-xs flex gap-1">
               <span>hvn</span>
-              <span className="text-primary">lib</span>
+              <span className="text-muted-foreground">storage</span>
             </Link>
             <div className="flex gap-2 items-center">
               <ModeToggle variant="ghost" />

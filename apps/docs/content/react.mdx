@@ -1,0 +1,35 @@
+---
+title: Upload with React
+description: Create route-aware hooks with end-to-end input and metadata inference.
+---
+
+The React package manages browser client scopes internally and exposes Promise-facing controllers.
+
+```tsx title="app/storage.ts"
+import { createStorageHooks } from "@hvn-oss/storage-react";
+import type { AppStorage } from "../server/storage-contract.js";
+
+export const { useStorage } = createStorageHooks<AppStorage>();
+```
+
+One `useStorage(route)` instance owns at most one active Upload Session. Multiple components can own
+parallel sessions.
+
+```tsx title="app/document-intake.tsx"
+function DocumentIntake({ caseId }: { caseId: string }) {
+  const storage = useStorage("documents");
+
+  return (
+    <UploadPanel
+      files={storage.files}
+      onStart={(files) => storage.upload({ input: { caseId }, files })}
+      onPause={() => storage.pause()}
+      onContinue={() => storage.continue()}
+      onCancel={() => storage.cancel()}
+    />
+  );
+}
+```
+
+Client lifecycle callbacks are local observations. They do not imply durable server-side processing
+or exactly-once behavior.

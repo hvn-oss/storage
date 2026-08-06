@@ -1,0 +1,38 @@
+---
+title: Compose with Effect
+description:
+  Preserve typed failures, application requirements, scopes, interruption, and Layers at the server
+  and browser boundaries.
+---
+
+Effect-native authoring uses the same Upload Route contract while preserving application service
+requirements in callback types.
+
+```ts title="server/upload-routes.ts"
+export const uploadRoutes = createEffectUploadRoutes({
+  documents: effectUploadRoute({
+    input: DocumentInput,
+    authorizeUpload: ({ input, files, allow }) =>
+      Effect.gen(function* () {
+        const cases = yield* Cases;
+        yield* cases.requireEditor(input.caseId);
+        return allow({ sessionMetadata: { caseId: input.caseId }, files });
+      }),
+    authorizeOperation,
+  }),
+});
+```
+
+Compose concrete application and HVN Layers once at the runtime boundary.
+
+```ts title="server/main.ts"
+const appLayer = Layer.mergeAll(Cases.layer, postgresLayer, digitalOceanSpacesLayer);
+
+const handleStorage = createEffectStorageHandler({ routes: uploadRoutes }).pipe(
+  Effect.provide(appLayer),
+  Effect.runPromise,
+);
+```
+
+The Effect browser client acquires an equivalent live handle as a scoped Effect. Observation and
+controls remain Effects, preserving typed failures, interruption, and disposal.

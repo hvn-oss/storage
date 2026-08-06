@@ -1,41 +1,34 @@
 ---
-title: Index Page
-description: This is the index page of the documentation.
+title: How HVN Storage works
+description:
+  Authorize in your application while file bytes move directly between browsers and S3-compatible
+  storage.
 ---
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore
-et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-culpa qui officia deserunt mollit anim id est laborum.
+> **Documentation prototype:** The APIs on these pages are illustrative shapes derived from the v1
+> specification. They are not an implemented or installable release.
 
-## Section 1
+HVN Storage separates **authority** from **file transfer**. Your application decides who may upload
+or download. HVN Storage coordinates durable state, short-lived capabilities, transfer, and trusted
+verification. File bytes do not pass through your application server.
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore
+## The complete path
 
-### Section 2
+1. Your server authorizes one or more files against a named **Upload Route**.
+2. HVN Storage creates an **Upload Session** with an independent **File Record** for each file.
+3. The browser transfers bytes directly to S3-compatible storage using short-lived capabilities.
+4. Trusted server logic verifies the storage key and exact byte size before making a file ready.
+5. Your application authorizes each download before HVN Storage issues a short-lived bearer
+   capability.
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore
+## Start with the reference journey
 
-### CodeBlock
+The [quickstart](/docs/quickstart) follows the first supported vertical slice: Promise-first server
+APIs, React, Node, direct Postgres, and DigitalOcean Spaces. After that path works, substitute only
+the surface or runtime you need:
 
-```ts
-console.log("Hello World");
-```
+- [Vanilla browser client](/docs/browser-client) instead of React.
+- [Effect-native authoring](/docs/effect) instead of Promise callbacks.
+- [Cloudflare Workers](/docs/cloudflare) instead of Node.
 
-```ts title="tab1.ts" tab="Tab 1"
-console.log("Tab 1");
-```
-
-```tsx title="tab2.ts" tab="Tab 2"
-console.log("Tab 2");
-```
-
-#### Table
-
-| Head                            | Description                         |
-| ------------------------------- | ----------------------------------- |
-| `hello`                         | Hello World                         |
-| very **important**              | Hey                                 |
-| _Surprisingly_                  | Fumadocs                            |
-| very long text that looks weird | hello world hello world hello world |
+Read [who owns what](/docs/responsibility-boundaries) before production deployment.
