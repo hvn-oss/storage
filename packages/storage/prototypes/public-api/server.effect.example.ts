@@ -1,6 +1,6 @@
 import { Context, Effect, Layer, Schema } from "effect";
 import {
-  createEffectUploadHandler,
+  createEffectStorageHandler,
   defineEffectUploadRoutes,
   defineEffectUploadRoute,
   effectServerLayer,
@@ -73,7 +73,7 @@ const document = defineEffectUploadRoute({
 export const effectUploadRoutes = defineEffectUploadRoutes({ document });
 export type EffectAppUploadRoutes = UploadContract<typeof effectUploadRoutes>;
 
-const handle = createEffectUploadHandler({
+const handle = createEffectStorageHandler({
   basePath: "/api/storage",
   routes: effectUploadRoutes,
 });

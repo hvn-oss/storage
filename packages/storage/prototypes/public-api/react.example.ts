@@ -1,7 +1,7 @@
-import { createReactUploadHooks } from "./api.ts";
+import { createStorageHooks } from "./api.ts";
 import type { AppUploadRoutes } from "./server.promise.example.ts";
 
-const { useStorage } = createReactUploadHooks<AppUploadRoutes>({
+const { useStorage } = createStorageHooks<AppUploadRoutes>({
   baseUrl: "/api/storage",
 });
 
@@ -19,12 +19,18 @@ export function AvatarUploader() {
     });
   };
 
+  const download = async (fileId: string) => {
+    const response = await avatar.download(fileId);
+    return response.metadata?.dominantColor;
+  };
+
   // Render details are omitted. The prototype is testing controller shape and inference.
   return {
     state: avatar.state,
     progress: avatar.progress,
     result: avatar.result,
     onFiles,
+    download,
     pause: avatar.pause,
     continue: avatar.continue,
     cancel: avatar.cancel,

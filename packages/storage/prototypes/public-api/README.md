@@ -26,6 +26,8 @@ browser, and React consumers without making server code reachable from a browser
   Effect operation acquires a scoped handle so interruption and disposal remain explicit.
 - React's `useStorage(route)` returns an imperative, route-bound controller without coupling the
   package to a query or form library. One hook instance owns at most one active Upload Session.
+- Names reflect capability breadth: clients, handlers, React factories, and controllers use
+  `Storage`; Upload Routes, upload operations, transfer handles, and upload results retain `Upload`.
 - Authorization callback contexts provide typed decision helpers, keeping `_tag` construction and
   output-shape validation out of application code.
 

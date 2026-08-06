@@ -302,7 +302,7 @@ export interface PromiseServerRuntime {
   readonly storageBindings: Readonly<Record<string, unknown>>;
 }
 
-export declare function createUploadHandler<Routes extends PromiseUploadRouteRegistry>(config: {
+export declare function createStorageHandler<Routes extends PromiseUploadRouteRegistry>(config: {
   readonly basePath: string;
   readonly routes: Routes;
   readonly runtime: PromiseServerRuntime;
@@ -317,7 +317,7 @@ type RouteRequirements<Routes extends EffectUploadRouteRegistry> =
     ? Requirements
     : never;
 
-export declare function createEffectUploadHandler<
+export declare function createEffectStorageHandler<
   Routes extends EffectUploadRouteRegistry,
 >(config: {
   readonly basePath: string;
@@ -400,9 +400,7 @@ export interface PromiseUploadHandle {
   readonly dispose: () => void;
 }
 
-export interface PromiseUploadClient<
-  Contract extends Record<string, UploadRouteContract<any, any>>,
-> {
+export interface StorageClient<Contract extends Record<string, UploadRouteContract<any, any>>> {
   readonly upload: <Key extends keyof Contract>(
     route: Key,
     options: UploadOptions<RouteInput<Contract, Key>>,
@@ -417,12 +415,12 @@ export interface PromiseUploadClient<
   ) => Promise<DownloadResponse<RoutePublicMetadata<Contract, Key>>>;
 }
 
-export declare function createUploadClient<
+export declare function createStorageClient<
   Contract extends Record<string, UploadRouteContract<any, any>>,
 >(config: {
   readonly baseUrl: string | URL;
   readonly fetch?: typeof globalThis.fetch;
-}): PromiseUploadClient<Contract>;
+}): StorageClient<Contract>;
 
 export interface EffectFileTransferHandle {
   readonly clientId: string;
@@ -443,7 +441,7 @@ export interface EffectUploadHandle {
   readonly cancel: (fileId: string) => Effect.Effect<FileOutcome, UploadError>;
 }
 
-export interface EffectUploadClient<
+export interface EffectStorageClient<
   Contract extends Record<string, UploadRouteContract<any, any>>,
 > {
   readonly upload: <Key extends keyof Contract>(
@@ -460,11 +458,11 @@ export interface EffectUploadClient<
   ) => Effect.Effect<DownloadResponse<RoutePublicMetadata<Contract, Key>>, UploadError>;
 }
 
-export declare function createEffectUploadClient<
+export declare function createEffectStorageClient<
   Contract extends Record<string, UploadRouteContract<any, any>>,
->(config: { readonly baseUrl: string | URL }): EffectUploadClient<Contract>;
+>(config: { readonly baseUrl: string | URL }): EffectStorageClient<Contract>;
 
-export interface UploadController<Input> {
+export interface StorageController<Input, PublicMetadata> {
   readonly state: "idle" | "running" | "paused" | "settled";
   readonly progress: UploadProgress | undefined;
   readonly result: UploadResult | undefined;
@@ -472,17 +470,19 @@ export interface UploadController<Input> {
   readonly pause: () => void;
   readonly continue: () => Promise<UploadResult>;
   readonly cancel: (fileId: string) => Promise<FileOutcome>;
+  readonly recover: (sessionId: string) => Promise<UploadSession>;
+  readonly download: (fileId: string) => Promise<DownloadResponse<PublicMetadata>>;
   readonly dispose: () => void;
 }
 
-export declare function createReactUploadHooks<
+export declare function createStorageHooks<
   Contract extends Record<string, UploadRouteContract<any, any>>,
 >(config: {
   readonly baseUrl: string | URL;
 }): {
   readonly useStorage: <Key extends keyof Contract>(
     route: Key,
-  ) => UploadController<RouteInput<Contract, Key>>;
+  ) => StorageController<RouteInput<Contract, Key>, RoutePublicMetadata<Contract, Key>>;
 };
 
 export declare const effectServerLayer: Layer.Layer<EffectServerRuntime>;

@@ -1,14 +1,14 @@
 import { Effect } from "effect";
-import { createEffectUploadClient, createUploadClient } from "./api.ts";
+import { createEffectStorageClient, createStorageClient } from "./api.ts";
 import type { AppUploadRoutes } from "./server.promise.example.ts";
 
-const uploads = createUploadClient<AppUploadRoutes>({
+const storage = createStorageClient<AppUploadRoutes>({
   baseUrl: new URL("/api/storage", location.origin),
 });
 
 declare const avatar: File;
 
-const upload = uploads.upload("avatar", {
+const upload = storage.upload("avatar", {
   idempotencyKey: crypto.randomUUID(),
   input: {
     accountId: "account-1",
@@ -33,15 +33,15 @@ unsubscribe();
 const ready = result.files.find((file) => file._tag === "Ready");
 
 if (ready?._tag === "Ready") {
-  const response = await uploads.download("avatar", ready.file.id);
+  const response = await storage.download("avatar", ready.file.id);
   console.log(response.metadata?.dominantColor);
 }
 
-const effectUploads = createEffectUploadClient<AppUploadRoutes>({
+const effectStorage = createEffectStorageClient<AppUploadRoutes>({
   baseUrl: "/api/storage",
 });
 
-const uploadProgram = effectUploads
+const uploadProgram = effectStorage
   .upload("avatar", {
     idempotencyKey: crypto.randomUUID(),
     input: { accountId: "account-1" },
@@ -59,13 +59,13 @@ const uploadProgram = effectUploads
 void Effect.scoped(uploadProgram);
 
 // @ts-expect-error The registry has no route named "video".
-void uploads.upload("video", {
+void storage.upload("video", {
   idempotencyKey: crypto.randomUUID(),
   input: { accountId: "account-1" },
   files: [{ clientId: "avatar", file: avatar }],
 });
 
-void uploads.upload("avatar", {
+void storage.upload("avatar", {
   idempotencyKey: crypto.randomUUID(),
   // @ts-expect-error Avatar input requires accountId.
   input: {},

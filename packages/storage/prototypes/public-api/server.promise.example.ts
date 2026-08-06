@@ -1,6 +1,6 @@
 import { Schema } from "effect";
 import {
-  createUploadHandler,
+  createStorageHandler,
   defineUploadRoute,
   defineUploadRoutes,
   type PromiseServerRuntime,
@@ -91,7 +91,7 @@ export type AppUploadRoutes = UploadContract<typeof uploadRoutes>;
 
 declare const runtime: PromiseServerRuntime;
 
-export const handleStorageRequest = createUploadHandler({
+export const handleStorageRequest = createStorageHandler({
   basePath: "/api/storage",
   routes: uploadRoutes,
   runtime,
