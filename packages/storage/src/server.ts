@@ -2,6 +2,7 @@ import { storageProtocolVersion, storageProtocolVersionHeader } from "./internal
 
 /** Configures the application handler guarded by the HVN Storage protocol boundary. */
 export type StorageHandlerConfig = {
+  /** Processes requests that have passed protocol-version validation. */
   readonly handle: (request: Request) => Response | Promise<Response>;
 };
 

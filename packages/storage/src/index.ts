@@ -6,8 +6,13 @@ export type UploadRetry = "never";
 
 /** Contains the enumerable data shared by a public Promise error and its HTTP representation. */
 export type UploadErrorData = {
+  /** Identifies the stable public error outcome. */
   readonly _tag: UploadErrorTag;
+
+  /** States whether replaying the failed request is appropriate. */
   readonly retry: UploadRetry;
+
+  /** Correlates the error with its trusted server-side control request. */
   readonly requestId: string;
 };
 
