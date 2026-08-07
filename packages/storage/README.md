@@ -13,7 +13,7 @@ Runtime-neutral contracts and the public entrypoints for HVN Storage.
 - `@hvn-oss/storage/s3/effect`
 - `@hvn-oss/storage/persistence/effect`
 
-The v1 package spine intentionally does not expose runtime APIs yet.
+The initial v1 surface exposes the Promise browser and server protocol boundaries.
 
 ## Development
 
