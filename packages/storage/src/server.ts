@@ -1,17 +1,12 @@
 import { storageProtocolVersion, storageProtocolVersionHeader } from "./internal/protocol.ts";
 
-export interface PromiseServerRuntime {
-  readonly persistence: unknown;
-  readonly storageBindings: Readonly<Record<string, unknown>>;
-}
+/** Configures the application handler guarded by the HVN Storage protocol boundary. */
+export type StorageHandlerConfig = {
+  readonly handle: (request: Request) => Response | Promise<Response>;
+};
 
-export interface StorageHandlerConfig {
-  readonly basePath: string;
-  readonly routes: Readonly<Record<string, unknown>>;
-  readonly runtime: PromiseServerRuntime;
-}
-
-export function createStorageHandler(_config: StorageHandlerConfig) {
+/** Creates a standard Request-to-Response handler that validates protocol version before dispatch. */
+export function createStorageHandler(config: StorageHandlerConfig) {
   return async (request: Request): Promise<Response> => {
     const requestId = crypto.randomUUID();
 
@@ -36,12 +31,14 @@ export function createStorageHandler(_config: StorageHandlerConfig) {
       );
     }
 
-    return new Response(null, {
-      status: 204,
-      headers: {
-        "HVN-Storage-Request-Id": requestId,
-        [storageProtocolVersionHeader]: storageProtocolVersion,
-      },
+    const response = await config.handle(request);
+    const headers = new Headers(response.headers);
+    headers.set("HVN-Storage-Request-Id", requestId);
+    headers.set(storageProtocolVersionHeader, storageProtocolVersion);
+    return new Response(response.body, {
+      headers,
+      status: response.status,
+      statusText: response.statusText,
     });
   };
 }

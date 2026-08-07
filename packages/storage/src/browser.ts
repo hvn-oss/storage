@@ -3,15 +3,18 @@ import { storageProtocolVersion, storageProtocolVersionHeader } from "./internal
 
 export { UnsupportedProtocolVersionError };
 
-export interface StorageClient {
+/** Defines the available Promise-based browser control requests. */
+export type StorageClient = {
   recover(route: string, sessionId: string): Promise<never>;
-}
+};
 
-export interface StorageClientConfig {
+/** Configures a browser control client and its transport. */
+export type StorageClientConfig = {
   readonly baseUrl: string | URL;
   readonly fetch?: typeof globalThis.fetch;
-}
+};
 
+/** Creates a Promise-based browser control client for one HVN Storage handler base URL. */
 export function createStorageClient(config: StorageClientConfig): StorageClient {
   const fetch = config.fetch ?? globalThis.fetch;
   const baseUrl = new URL(config.baseUrl);
@@ -38,6 +41,7 @@ export function createStorageClient(config: StorageClientConfig): StorageClient 
   };
 }
 
+/** Recognizes the complete, frozen v1 protocol-version error envelope. */
 function isUnsupportedProtocolVersion(
   body: unknown,
 ): body is { error: { _tag: "UnsupportedProtocolVersion"; message: string; requestId: string } } {
@@ -53,7 +57,9 @@ function isUnsupportedProtocolVersion(
     "message" in error &&
     "requestId" in error &&
     error._tag === "UnsupportedProtocolVersion" &&
+    "retry" in error &&
     typeof error.message === "string" &&
-    typeof error.requestId === "string"
+    typeof error.requestId === "string" &&
+    error.retry === "never"
   );
 }

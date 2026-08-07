@@ -68,3 +68,9 @@ Triage uses the default canonical label vocabulary. See `docs/agents/triage-labe
 ### Domain docs
 
 Domain documentation uses a single-context layout. See `docs/agents/domain.md`.
+
+## Code style
+
+- Prefer `type` declarations. Use `interface` only when declaration merging or extension is
+  required.
+- Document code with concise JSDoc that explains its public contract or non-obvious behavior.

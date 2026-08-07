@@ -2,10 +2,12 @@ import { expect, test } from "vite-plus/test";
 import { createStorageClient, UnsupportedProtocolVersionError } from "../src/browser.ts";
 import { createStorageHandler } from "../src/server.ts";
 
+let dispatchedRequests = 0;
 const handler = createStorageHandler({
-  basePath: "/storage",
-  routes: {},
-  runtime: { persistence: {}, storageBindings: {} },
+  handle: () => {
+    dispatchedRequests += 1;
+    return new Response(null, { status: 204 });
+  },
 });
 
 test("rejects missing and unsupported protocol versions before processing a request", async () => {
@@ -41,6 +43,7 @@ test("rejects missing and unsupported protocol versions before processing a requ
   expect(unsupportedVersion.headers.get("HVN-Storage-Request-Id")).not.toBe(
     missingVersion.headers.get("HVN-Storage-Request-Id"),
   );
+  expect(dispatchedRequests).toBe(0);
 });
 
 test("maps a protocol rejection to an enumerable Promise error", async () => {
@@ -67,4 +70,23 @@ test("maps a protocol rejection to an enumerable Promise error", async () => {
     );
     expect(JSON.stringify(error)).not.toContain("server-secret");
   }
+});
+
+test("does not treat a non-canonical protocol error as UnsupportedProtocolVersion", async () => {
+  const client = createStorageClient({
+    baseUrl: "https://example.com/storage",
+    fetch: async () =>
+      Response.json({
+        error: {
+          _tag: "UnsupportedProtocolVersion",
+          retry: "safe",
+          message: "The HVN Storage protocol version is not supported.",
+          requestId: crypto.randomUUID(),
+        },
+      }),
+  });
+
+  await expect(client.recover("example", "session-id")).rejects.not.toBeInstanceOf(
+    UnsupportedProtocolVersionError,
+  );
 });
