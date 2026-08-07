@@ -1,5 +1,5 @@
 import { expect, test } from "vite-plus/test";
-import { createStorageClient, UnsupportedProtocolVersionError } from "../src/browser.ts";
+import { createStorageClient, UnsupportedProtocolVersion } from "../src/browser.ts";
 import { createStorageHandler } from "../src/server.ts";
 
 let dispatchedRequests = 0;
@@ -64,7 +64,7 @@ test("maps a protocol rejection to an enumerable Promise error", async () => {
   try {
     await client.recover("example", "session-id");
   } catch (error) {
-    expect(error).toBeInstanceOf(UnsupportedProtocolVersionError);
+    expect(error).toBeInstanceOf(UnsupportedProtocolVersion);
     expect(Object.keys(error as object)).toEqual(
       expect.arrayContaining(["_tag", "retry", "message", "requestId"]),
     );
@@ -87,6 +87,6 @@ test("does not treat a non-canonical protocol error as UnsupportedProtocolVersio
   });
 
   await expect(client.recover("example", "session-id")).rejects.not.toBeInstanceOf(
-    UnsupportedProtocolVersionError,
+    UnsupportedProtocolVersion,
   );
 });

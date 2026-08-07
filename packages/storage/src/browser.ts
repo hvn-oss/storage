@@ -1,7 +1,13 @@
-import { UnsupportedProtocolVersionError } from "./index.ts";
+import { Option, Schema } from "effect";
+import { UnsupportedProtocolVersion } from "./index.ts";
 import { storageProtocolVersion, storageProtocolVersionHeader } from "./internal/protocol.ts";
 
-export { UnsupportedProtocolVersionError };
+export { UnsupportedProtocolVersion };
+
+/** Validates the HTTP envelope containing the schema-backed protocol error. */
+const unsupportedProtocolVersionResponse = Schema.Struct({
+  error: UnsupportedProtocolVersion,
+});
 
 /** Defines the available Promise-based browser control requests. */
 export type StorageClient = {
@@ -36,47 +42,12 @@ export function createStorageClient(config: StorageClientConfig): StorageClient 
       );
 
       const body: unknown = await response.json();
-      if (isUnsupportedProtocolVersion(body)) {
-        throw new UnsupportedProtocolVersionError(body.error.message, body.error.requestId);
+      const decodedResponse = Schema.decodeUnknownOption(unsupportedProtocolVersionResponse)(body);
+      if (Option.isSome(decodedResponse)) {
+        throw decodedResponse.value.error;
       }
 
       throw new Error("The HVN Storage control request failed.");
     },
   };
-}
-
-/** Recognizes the complete, frozen v1 protocol-version error envelope. */
-function isUnsupportedProtocolVersion(body: unknown): body is {
-  /** Holds the public protocol-rejection details. */
-  error: {
-    /** Identifies this frozen error outcome. */
-    _tag: "UnsupportedProtocolVersion";
-
-    /** States that this error cannot be retried safely. */
-    retry: "never";
-
-    /** Provides non-contractual public diagnostic text. */
-    message: string;
-
-    /** Correlates the public error with its trusted request. */
-    requestId: string;
-  };
-} {
-  if (typeof body !== "object" || body === null || !("error" in body)) {
-    return false;
-  }
-
-  const { error } = body;
-  return (
-    typeof error === "object" &&
-    error !== null &&
-    "_tag" in error &&
-    "message" in error &&
-    "requestId" in error &&
-    error._tag === "UnsupportedProtocolVersion" &&
-    "retry" in error &&
-    typeof error.message === "string" &&
-    typeof error.requestId === "string" &&
-    error.retry === "never"
-  );
 }
