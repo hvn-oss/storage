@@ -1,4 +1,4 @@
-import { expect, test } from "vite-plus/test";
+import { afterAll, expect, test, vi } from "vite-plus/test";
 import { createStorageClient, UnsupportedProtocolVersion } from "../src/browser.ts";
 import { createStorageHandler } from "../src/server.ts";
 
@@ -8,6 +8,17 @@ const handler = createStorageHandler({
     dispatchedRequests += 1;
     return new Response(null, { status: 204 });
   },
+});
+
+let controlResponse = (_request: Request): Promise<Response> =>
+  Promise.reject(new Error("The test control response was not configured."));
+
+vi.stubGlobal("fetch", (input: string | URL | Request, init?: RequestInit) =>
+  controlResponse(new Request(input, init)),
+);
+
+afterAll(() => {
+  vi.unstubAllGlobals();
 });
 
 test("rejects missing and unsupported protocol versions before processing a request", async () => {
@@ -47,13 +58,12 @@ test("rejects missing and unsupported protocol versions before processing a requ
 });
 
 test("maps a protocol rejection to an enumerable Promise error", async () => {
+  controlResponse = (request) => {
+    request.headers.delete("HVN-Storage-Version");
+    return handler(request);
+  };
   const client = createStorageClient({
     baseUrl: "https://example.com/storage",
-    fetch: (input) => {
-      const request = new Request(input);
-      request.headers.delete("HVN-Storage-Version");
-      return handler(request);
-    },
   });
 
   await expect(client.recover("example", "session-id")).rejects.toMatchObject({
@@ -73,17 +83,17 @@ test("maps a protocol rejection to an enumerable Promise error", async () => {
 });
 
 test("does not treat a non-canonical protocol error as UnsupportedProtocolVersion", async () => {
+  controlResponse = async () =>
+    Response.json({
+      error: {
+        _tag: "UnsupportedProtocolVersion",
+        retry: "safe",
+        message: "The HVN Storage protocol version is not supported.",
+        requestId: crypto.randomUUID(),
+      },
+    });
   const client = createStorageClient({
     baseUrl: "https://example.com/storage",
-    fetch: async () =>
-      Response.json({
-        error: {
-          _tag: "UnsupportedProtocolVersion",
-          retry: "safe",
-          message: "The HVN Storage protocol version is not supported.",
-          requestId: crypto.randomUUID(),
-        },
-      }),
   });
 
   await expect(client.recover("example", "session-id")).rejects.not.toBeInstanceOf(
