@@ -7,7 +7,7 @@ export { UnsupportedProtocolVersion };
 
 /** Defines the available Promise-based browser control requests. */
 export type StorageClient = {
-  /** Recovers the canonical session summary for an authorized route and session. */
+  /** Sends a recovery request that currently rejects with a protocol or control-request error. */
   recover(route: string, sessionId: string): Promise<never>;
 };
 

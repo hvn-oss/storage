@@ -57,7 +57,7 @@ test("rejects missing and unsupported protocol versions before processing a requ
   expect(dispatchedRequests).toBe(0);
 });
 
-test("maps a protocol rejection to an enumerable Promise error", async () => {
+test("maps a protocol rejection to a typed Promise error", async () => {
   controlResponse = (request) => {
     request.headers.delete("HVN-Storage-Version");
     return handler(request);
@@ -75,9 +75,11 @@ test("maps a protocol rejection to an enumerable Promise error", async () => {
     await client.recover("example", "session-id");
   } catch (error) {
     expect(error).toBeInstanceOf(UnsupportedProtocolVersion);
-    expect(Object.keys(error as object)).toEqual(
-      expect.arrayContaining(["_tag", "retry", "message", "requestId"]),
-    );
+    expect(error).toMatchObject({
+      _tag: "UnsupportedProtocolVersion",
+      retry: "never",
+      message: "The HVN Storage protocol version is not supported.",
+    });
     expect(JSON.stringify(error)).not.toContain("server-secret");
   }
 });

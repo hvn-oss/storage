@@ -1,31 +1,20 @@
 import { Schema } from "effect";
 
-/** Defines the fields accepted by the schema-backed protocol error constructor. */
-type UnsupportedProtocolVersionProps = {
-  /** States that this error cannot be retried safely. */
-  readonly retry: "never";
-
-  /** Provides non-contractual public diagnostic text. */
-  readonly message: string;
-
-  /** Correlates the public error with its trusted request. */
-  readonly requestId: string;
-};
-
 /** Reports that the server rejected a missing or unsupported HVN Storage protocol version. */
 export class UnsupportedProtocolVersion extends Schema.TaggedErrorClass<UnsupportedProtocolVersion>()(
   "UnsupportedProtocolVersion",
   {
-    retry: Schema.Literal("never"),
-    message: Schema.String,
-    requestId: Schema.String,
+    retry: Schema.Literal("never").annotate({
+      description: "States that this error cannot be retried safely.",
+    }),
+    message: Schema.String.annotate({
+      description: "Provides non-contractual public diagnostic text.",
+    }),
+    requestId: Schema.String.annotate({
+      description: "Correlates the public error with its trusted request.",
+    }),
   },
-) {
-  constructor(props: UnsupportedProtocolVersionProps) {
-    super(props);
-    Object.defineProperty(this, "message", { enumerable: true });
-  }
-}
+) {}
 
 /** Defines the canonical HTTP envelope for an unsupported protocol version error. */
 export const UnsupportedProtocolVersionResponse = Schema.Struct({
