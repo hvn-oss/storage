@@ -68,3 +68,15 @@ Triage uses the default canonical label vocabulary. See `docs/agents/triage-labe
 ### Domain docs
 
 Domain documentation uses a single-context layout. See `docs/agents/domain.md`.
+
+## Code style
+
+- Prefer `type` declarations. Use `interface` only when declaration merging or extension is
+  required.
+- Document code with concise JSDoc that explains its public contract or non-obvious behavior.
+- Document every field and method in a `type` or `interface` with concise JSDoc.
+- Derive canonical schema plain objects from their respective schema with `Schema.encodeSync`.
+- For fields in schema classes that need default values, use `Schema.withConstructorDefault`.
+- Return recoverable errors; never throw them. Throw or defect only for crash-level failures such as
+  bugs and invariant violations.
+- Never use the generic `Error` class for recoverable errors; use `Schema.TaggedErrorClass` instead.
