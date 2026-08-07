@@ -1,0 +1,5 @@
+interface:
+  display_name: "Create Implementation Plan"
+  short_description: "Plan work with trackable tasks"
+policy:
+  allow_implicit_invocation: false
