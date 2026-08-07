@@ -21,7 +21,7 @@ catalog:
   clsx: ^2.1.1
   cmdk: ^1.1.1
   cnfast: ^0.1.0
-  effect: ^3.22.1
+  effect: beta
   effect-solutions: ^0.5.3
   fumadocs-core: ^16.14.0
   fumadocs-mdx: ^15.2.2
@@ -35,6 +35,8 @@ catalog:
   typescript: ^7.0.2
   vite: npm:@voidzero-dev/vite-plus-core@0.2.8
   vite-plus: 0.2.8
+  "@changesets/changelog-github": 1.0.0-next.8
+  "@changesets/cli": 3.0.0-next.11
 overrides:
   vite: "catalog:"
 peerDependencyRules:

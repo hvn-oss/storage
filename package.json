@@ -4,13 +4,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "ready": "vp check && vp run -r test && vp run -r build",
     "dev": "vp run docs#dev",
-    "typecheck": "vp run -r typecheck",
     "clean": "vp run -r clean && git clean -fdx node_modules dist .output",
     "prepare": "vp config && effect-tsgo patch --typescript"
   },
   "devDependencies": {
+    "@changesets/changelog-github": "catalog:",
+    "@changesets/cli": "catalog:",
     "@effect/tsgo": "catalog:",
     "@hvn-oss/tsconfig": "catalog:",
     "effect-solutions": "catalog:",

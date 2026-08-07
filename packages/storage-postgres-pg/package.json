@@ -1,8 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/package",
-  "name": "@hvn-oss/storage",
+  "name": "@hvn-oss/storage-postgres-pg",
   "version": "0.0.0",
-  "description": "Direct-to-cloud file transfer contracts and runtime adapters.",
+  "description": "Postgres adapter for HVN Storage using node-postgres.",
   "homepage": "https://github.com/hvn-oss/storage#readme",
   "bugs": {
     "url": "https://github.com/hvn-oss/storage/issues"
@@ -12,7 +12,7 @@
   "repository": {
     "type": "git",
     "url": "github:hvn-oss/storage",
-    "directory": "packages/storage"
+    "directory": "packages/storage-postgres-pg"
   },
   "files": [
     "dist"
@@ -21,25 +21,15 @@
   "sideEffects": false,
   "exports": {
     ".": "./dist/index.mjs",
-    "./browser": "./dist/browser.mjs",
-    "./browser/effect": "./dist/browser/effect.mjs",
-    "./persistence/effect": "./dist/persistence/effect.mjs",
-    "./s3": "./dist/s3.mjs",
-    "./s3/effect": "./dist/s3/effect.mjs",
-    "./server": "./dist/server.mjs",
-    "./server/effect": "./dist/server/effect.mjs",
+    "./migrations": "./dist/migrations.mjs",
     "./package.json": "./package.json"
   },
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "dev": "vp pack --watch",
     "clean": "git clean -fdx node_modules dist .output",
     "prepublishOnly": "vp run build"
-  },
-  "dependencies": {
-    "effect": "catalog:"
   },
   "devDependencies": {
     "@hvn-oss/tsconfig": "catalog:",
