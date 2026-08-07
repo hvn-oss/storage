@@ -1,3 +1,5 @@
+import { Schema } from "effect";
+import { UnsupportedProtocolVersion, UnsupportedProtocolVersionResponse } from "./index.ts";
 import { storageProtocolVersion, storageProtocolVersionHeader } from "./internal/protocol.ts";
 
 /** Configures the application handler guarded by the HVN Storage protocol boundary. */
@@ -12,24 +14,19 @@ export function createStorageHandler(config: StorageHandlerConfig) {
     const requestId = crypto.randomUUID();
 
     if (request.headers.get(storageProtocolVersionHeader) !== storageProtocolVersion) {
-      return Response.json(
-        {
-          error: {
-            _tag: "UnsupportedProtocolVersion",
-            retry: "never",
-            message: "The HVN Storage protocol version is not supported.",
-            requestId,
-          },
+      const error = new UnsupportedProtocolVersion({
+        retry: "never",
+        message: "The HVN Storage protocol version is not supported.",
+        requestId,
+      });
+      return Response.json(Schema.encodeSync(UnsupportedProtocolVersionResponse)({ error }), {
+        status: 400,
+        headers: {
+          "Cache-Control": "no-store",
+          "HVN-Storage-Request-Id": requestId,
+          [storageProtocolVersionHeader]: storageProtocolVersion,
         },
-        {
-          status: 400,
-          headers: {
-            "Cache-Control": "no-store",
-            "HVN-Storage-Request-Id": requestId,
-            [storageProtocolVersionHeader]: storageProtocolVersion,
-          },
-        },
-      );
+      });
     }
 
     const response = await config.handle(request);

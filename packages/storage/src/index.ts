@@ -26,3 +26,8 @@ export class UnsupportedProtocolVersion extends Schema.TaggedErrorClass<Unsuppor
     Object.defineProperty(this, "message", { enumerable: true });
   }
 }
+
+/** Defines the canonical HTTP envelope for an unsupported protocol version error. */
+export const UnsupportedProtocolVersionResponse = Schema.Struct({
+  error: UnsupportedProtocolVersion,
+});

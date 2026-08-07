@@ -75,3 +75,4 @@ Domain documentation uses a single-context layout. See `docs/agents/domain.md`.
   required.
 - Document code with concise JSDoc that explains its public contract or non-obvious behavior.
 - Document every field and method in a `type` or `interface` with concise JSDoc.
+- Derive canonical schema plain objects from their respective schema with `Schema.encodeSync`.
