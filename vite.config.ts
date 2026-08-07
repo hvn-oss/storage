@@ -21,7 +21,7 @@ export default defineConfig({
       ready: {
         command: ["vp run test", "vp run build"],
       },
-      check: "vp check",
+      check: "vp check --fix",
       test: {
         command: "vp run check && vp run --filter @hvn-oss/* build && vp test && vp run -r test",
       },
