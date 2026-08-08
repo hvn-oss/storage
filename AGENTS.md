@@ -80,3 +80,5 @@ Domain documentation uses a single-context layout. See `docs/agents/domain.md`.
 - Return recoverable errors; never throw them. Throw or defect only for crash-level failures such as
   bugs and invariant violations.
 - Never use the generic `Error` class for recoverable errors; use `Schema.TaggedErrorClass` instead.
+- Do not add custom overrides to Effect schema classes for enumerability; the classes already
+  support serialization.
